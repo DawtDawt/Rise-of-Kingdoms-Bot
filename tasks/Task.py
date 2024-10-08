@@ -20,6 +20,7 @@ import time
 from filepath.constants import RESOURCES, SPEEDUPS, BOOSTS, EQUIPMENT, OTHER, MAP, HOME
 from random import randrange, uniform
 
+
 class Task:
 
     center = (640, 360)
@@ -115,6 +116,8 @@ class Task:
         self.tap(60, 540, 0.5)
         self.tap(1105, 200, 1)
         self.tap(1220, 35, 2)
+        self.tap(1220, 35, 2)
+        self.tap(60, 60, 2)
 
     # Building Position
     def find_building_title(self):
@@ -142,6 +145,8 @@ class Task:
         is_open, _, _ = self.gui.check_any(
             ImagePathAndProps.MENU_OPENED_IMAGE_PATH.value
         )
+        print("is_open")
+        print(is_open)
         if should_open and not is_open:
             self.tap(c_x, c_y, 0.5)
         elif not should_open and is_open:
@@ -171,6 +176,7 @@ class Task:
         if not self.isRoKRunning():
             self.set_text(insert="game is not running, try to start game")
             self.runOfRoK()
+            self.set_text(insert="booting up game")
             start = time.time()
             end = start
             while end - start <= 300 and self.isRoKRunning():
@@ -224,20 +230,26 @@ class Task:
             traceback.print_exc()
 
         return pos_list
-    
 
     def check_capcha(self):
-        (found, _, pos) = self.gui.check_any(ImagePathAndProps.VERIFICATION_VERIFY_TITLE_IMAGE_PATH.value)
+        (found, _, pos) = self.gui.check_any(
+            ImagePathAndProps.VERIFICATION_VERIFY_TITLE_IMAGE_PATH.value
+        )
         if found:
             self.tap(pos[0], pos[1] + 258, 1)
             time.sleep(5)
             self.pass_verification()
-        (found, _, pos) = self.gui.check_any(ImagePathAndProps.VERIFICATION_VERIFY_BUTTON_IMAGE_PATH.value)
+        (found, _, pos) = self.gui.check_any(
+            ImagePathAndProps.VERIFICATION_VERIFY_BUTTON_IMAGE_PATH.value
+        )
         if found:
             self.tap(pos[0], pos[1], 1)
             time.sleep(5)
             self.pass_verification()
-        (found, _, pos) = self.gui.check_any(GuiCheckImagePathAndProps.VERIFICATION_CHEST_IMG_PATH.value, GuiCheckImagePathAndProps.VERIFICATION_CHEST1_IMG_PATH.value)
+        (found, _, pos) = self.gui.check_any(
+            GuiCheckImagePathAndProps.VERIFICATION_CHEST_IMG_PATH.value,
+            GuiCheckImagePathAndProps.VERIFICATION_CHEST1_IMG_PATH.value,
+        )
         if found:
             self.tap(pos[0], pos[1], 1)
             time.sleep(5)
@@ -345,11 +357,24 @@ class Task:
     def isRoKRunning(self):
         cmd = "dumpsys window windows | grep mCurrentFocus"
         str = self.device.shell(cmd)
-        return str.find("com.lilithgame.roc.gp/com.harry.engine.MainActivity") != -1
+        ret = str.find("com.lilithgame.roc.gp/com.harry.engine.MainActivity") != -1
+        return ret
 
     def runOfRoK(self):
         cmd = "am start -n com.lilithgame.roc.gp/com.harry.engine.MainActivity"
         str = self.device.shell(cmd)
+        time.sleep(3)
+        self.tap(600, 300, 1)
+        time.sleep(6)
+        # tap continue button
+        while True:
+            _, _, continue_pos = self.gui.check_any(
+                ImagePathAndProps.CONTINUE_PATH.value
+            )
+            if continue_pos is not None:
+                x, y = continue_pos
+                self.tap(x, y, 3)
+                return
 
     def stopRok(self):
         cmd = "am force-stop com.lilithgame.roc.gp"

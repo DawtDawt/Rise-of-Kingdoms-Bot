@@ -334,6 +334,14 @@ class ImagePathAndProps(Enum):
         25,
         CHEST_CONFIRM,
     ]
+    CONTINUE_PATH = [
+        "resource\\continue.png",
+        (1280, 720),
+        (0, 0, 0, 0),
+        0.90,
+        25,
+        CONTINUE_BUTTON,
+    ]
     ATTACK_BUTTON_POS_IMAGE_PATH = [
         "resource\\attack_button.png",
         (1280, 720),
@@ -722,19 +730,21 @@ class GuiCheckImagePathAndProps(Enum):
         WINDOW,
     ]
     VERIFICATION_CHEST_IMG_PATH = [
-        'resource\\verification_chest_button.png',
+        "resource\\verification_chest_button.png",
         (1280, 720),
         (0, 0, 0, 0),
         0.8,
         25,
-        VERIFICATION_CHEST]
+        VERIFICATION_CHEST,
+    ]
     VERIFICATION_CHEST1_IMG_PATH = [
-        'resource\\verification_chest_button1.png',
+        "resource\\verification_chest_button1.png",
         (1280, 720),
         (0, 0, 0, 0),
         0.8,
         25,
-        VERIFICATION_CHEST1]
+        VERIFICATION_CHEST1,
+    ]
 
 
 GuiCheckImagePathAndPropsOrdered = [

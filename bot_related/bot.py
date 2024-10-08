@@ -108,6 +108,9 @@ class Bot:
     def get_city_image(self):
         return self.screen_shot_task.do_city_screen()
 
+    def get_current_image(self):
+        return self.screen_shot_task.do_current_screen()
+
     def do_task(self, curr_task=TaskName.COLLECTING):
 
         tasks = [
@@ -136,7 +139,8 @@ class Bot:
             # Check verification before every task
             try:
                 self.task.get_curr_gui_name()
-            except Exception as e:
+                print("in while loop, recalculating")
+            except Exception:
                 traceback.print_exc()
                 self.task.set_text(insert="cannot pass verification - stopping bot now")
                 self.stop()
